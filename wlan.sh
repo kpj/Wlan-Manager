@@ -175,7 +175,7 @@ then
 else
 
 	# Detect action
-	if [ "`grep ${names[$num]} $pathToWpaConf`" == "" ] ; 
+	if [[ "`grep ${names[$num]} $pathToWpaConf`" == "" ]] ; 
 	then
 	
 		echo "Unknown network '${names[$num]}'"
