@@ -116,7 +116,7 @@ if [[ $iface == "" ]] ; then
 	echo "I could not detect any suitable wlan-interface..."
 	echo "Maybe you have not installed a proper wlan-driver"
 	card=`(lspci; lsusb) | grep -iP "Network|Wireless|WLAN"`
-	echo "Your wlan-card is '$card'"
+	echo "Your wlan-card might be '$card'"
 	echo "Look here (https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported) for the right driver!"
 	exit 1
 fi
