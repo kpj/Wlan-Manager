@@ -112,7 +112,7 @@ pathToWpaConf="/etc/wpa_supplicant.conf"
 # Get wlan-Interface
 iface=`grep ':' /proc/net/wireless | head -n1 | cut -d ':' -f 1`
 
-if [ $iface == "" ] ; then
+if [[ $iface == "" ]] ; then
 	echo "I could not detect any suitable wlan-interface..."
 	echo "Maybe you have not installed a proper wlan-driver"
 	card=`lspci | grep Network`
