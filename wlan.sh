@@ -110,7 +110,7 @@ function connectToWireless {
 pathToWpaConf="/etc/wpa_supplicant.conf"
  
 # Get wlan-Interface
-iface=`grep ':' /proc/net/wireless | head -n1 | cut -d ':' -f 1`
+iface=`iwconfig 2>/dev/null | grep -P "^[^ \t]" | cut -d\  -f1`
 
 if [[ $iface == "" ]] ; then
 	echo "I could not detect any suitable wlan-interface..."
