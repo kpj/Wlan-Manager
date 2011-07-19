@@ -87,9 +87,9 @@ function addToConf {
 	echo "}" >> tmp.new
 
 	# Update real wpa_supplicant.conf
-	#cp $pathToWpaConf tmp.old
-	#cp tmp.new $pathToWpaConf
-	#cat tmp.old >> $pathToWpaConf
+	cp $pathToWpaConf tmp.old
+	cp tmp.new $pathToWpaConf
+	cat tmp.old >> $pathToWpaConf
 
 	# Cleaning up
 	rm tmp
@@ -112,13 +112,16 @@ pathToWpaConf="/etc/wpa_supplicant.conf"
 # Get wlan-Interface
 iface=`iwconfig 2>/dev/null | grep -P "^[^ \t]" | cut -d\  -f1`
 
-if [[ $iface == "" ]] ; then
+if [[ $iface == "" ]] ; 
+then
 	echo "I could not detect any suitable wlan-interface..."
 	echo "Maybe you have not installed a proper wlan-driver"
 	card=`(lspci; lsusb) | grep -iP "Network|Wireless|WLAN"`
 	echo "Your wlan-card might be '$card'"
 	echo "Look here (https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported) for the right driver!"
 	exit 1
+else
+	echo "You are using $iface..."
 fi
 
 # Activate Interface
@@ -171,6 +174,7 @@ then
 			exit 0
 		;;
 		esac
+		echo
 	done
 else
 
@@ -187,7 +191,7 @@ else
 	
 		if [[ $networkType == *"No encryption"* ]] ; # Oder wasauchimmer da steht...
 		then
-			echo "Do not non encrypted networks to your config..."
+			echo "Do not add non encrypted networks to your config..."
 			echo "Now you will get connected to that network..."
 			echo "And I will shut up!"
 			iwconfig $iface essid ${names[$num]}
@@ -211,7 +215,7 @@ else
 	echo "' ..."
 	
 	# Freie IP und Router/Gateway IP automatisch rausfinden... hmmmmm
-	#connectToWireless "192.168.2.42" "192.168.2.1"
+	connectToWireless "192.168.2.42" "192.168.2.1"
 
 fi
 
