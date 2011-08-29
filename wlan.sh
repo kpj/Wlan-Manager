@@ -4,8 +4,8 @@ trap "rm tmp; rm tmp.new; rm tmp.old" SIGKILL
 # Make sure, that only root proceeds
 if [ $EUID -ne 0  ] ; #root:0, user:1000
 then
-        echo "This script must be run as root" 1>&2
-        exit 1
+	echo "This script must be run as root" 1>&2
+	exit 1
 fi
 
 echo "Wlan-Manager by "
@@ -101,7 +101,6 @@ function connectToWireless {
 	myIp=$1
 	routerIp=$2
 
-	wpa_supplicant -B -Dwext -i $iface -c $pathToWpaConf -dd
 	ifconfig $iface up $myIp
 	route add default gw $routerIp
 }
@@ -123,6 +122,9 @@ then
 else
 	echo "You are using $iface..."
 fi
+
+# Clean up, before starting
+ifconfig $iface down
 
 # Activate Interface
 ifconfig $iface up
@@ -214,8 +216,19 @@ else
 	echo -n ${names[$num]}
 	echo "' ..."
 	
-	# Freie IP und Router/Gateway IP automatisch rausfinden... hmmmmm
-	connectToWireless "192.168.2.42" "192.168.2.1"
+  wpa_supplicant -B -Dwext -i $iface -c $pathToWpaConf -dd
 
+  if dhcpcd $iface ; then
+    echo "You are connected..."
+    echo "Have fun :)"
+  else
+    echo "DHCP request failed.."
+    echo -n "Enter your desired IP adddddress: "
+    read ipAddr
+    gatewSug=`echo $ipAddr | sed 's/\.[0-9]*$/.1/g'`
+    echo -n "Enter your gateway address: "
+    read -ei "$gatewSug" gw
+	  connectToWireless "$ipAddr" "$gw"
+  fi
 fi
 
