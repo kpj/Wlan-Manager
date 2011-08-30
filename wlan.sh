@@ -1,4 +1,8 @@
 #! /bin/bash
+# Make better
+set -e
+set -u
+set -o pipefail
 # Delete tmp-data after quick exit
 trap "rm tmp; rm tmp.new; rm tmp.old" SIGKILL
 # Make sure, that only root proceeds
@@ -110,6 +114,10 @@ pathToWpaConf="/etc/wpa_supplicant.conf"
  
 # Get wlan-Interface
 iface=`iwconfig 2>/dev/null | grep -P "^[^ \t]" | cut -d\  -f1`
+
+# Start a "clean" session
+ifconfig $iface down
+pidof wpa_supplicant && killall -q wpa_supplicant 
 
 if [[ $iface == "" ]] ; 
 then
