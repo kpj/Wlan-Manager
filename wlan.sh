@@ -117,7 +117,8 @@ iface=`iwconfig 2>/dev/null | grep -P "^[^ \t]" | cut -d\  -f1`
 
 # Start a "clean" session
 ifconfig $iface down
-pidof wpa_supplicant && killall -q wpa_supplicant 
+pidof wpa_supplicant 2</dev/null && killall -q wpa_supplicant 
+pidof dhcpcd 2</dev/null && killall dhcpcd
 
 if [[ $iface == "" ]] ; 
 then
