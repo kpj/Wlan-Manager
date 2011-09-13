@@ -38,7 +38,7 @@ function showNetworks {
 }
 
 function getType {
-networkType=`iwlist eth1 scan | grep -A 4 W-Robbi | grep -E "IE:" | cut -d '/' -f 2`
+  networkType=`iwlist eth1 scan | grep -A 4 $essid | grep -E "IE:" | cut -d '/' -f 2`
 }
 
 function addToConf {
@@ -117,8 +117,8 @@ iface=`iwconfig 2>/dev/null | grep -P "^[^ \t]" | cut -d\  -f1`
 
 # Start a "clean" session
 ifconfig $iface down
-pidof wpa_supplicant 2</dev/null && killall -q wpa_supplicant 
-pidof dhcpcd 2</dev/null && killall dhcpcd
+pidof wpa_supplicant &>/dev/null && killall -q wpa_supplicant 
+pidof dhcpcd &>/dev/null && killall dhcpcd
 
 if [[ $iface == "" ]] ; 
 then
@@ -154,10 +154,11 @@ if [ $num -eq "0" ] ;
 then
 	while true ; do
 		echo "Now configuring..."
+    
 		config[0]="Set 'wpa_supplicant.conf' path"
 		config[1]="Delete known network"
 		config[2]="Exit"
-	
+	  
 		counti=1
 		for val in "${config[@]}" ; do
 			echo "[$counti] - $val"
@@ -240,4 +241,3 @@ else
 	  connectToWireless "$ipAddr" "$gw"
   fi
 fi
-
